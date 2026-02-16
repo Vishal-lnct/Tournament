@@ -10,30 +10,30 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/token/", {
-        method: "POST",
+      const response = await fetch("http://127.0.0.1:8000/api/login/", {
+        method: "POST", // ✅ IMPORTANT
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username,
-          password,
+          username: username,
+          password: password,
         }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("accessToken", data.access);
-        localStorage.setItem("refreshToken", data.refresh);
+        // ✅ Just store simple login flag
+        localStorage.setItem("isLoggedIn", "true");
 
         alert("Login Successful!");
         navigate("/dashboard");
       } else {
-        alert("Invalid credentials");
+        alert(data.error || "Invalid credentials");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Login error:", error);
       alert("Server error");
     }
   };
